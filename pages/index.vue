@@ -1,6 +1,5 @@
 <template>
-  <div class="hero is-fullheight">
-    <div class="hero-body">
+
       <div class="container">
         <div class="block">
           <nuxt-link to="/main" class="button">Start a room</nuxt-link>

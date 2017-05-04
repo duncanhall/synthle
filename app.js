@@ -21,4 +21,4 @@ app.use(async (ctx, next) => {
   await nuxt.render(ctx.req, ctx.res)
 })
 
-app.listen(2222, '0.0.0.0')
+app.listen(2222, '192.168.0.14')
