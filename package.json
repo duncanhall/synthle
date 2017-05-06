@@ -1,33 +1,35 @@
 {
   "name": "synthle",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "synthle",
   "author": "Duncan Hall <himself@duncanhall.net>",
   "private": true,
   "scripts": {
-    "dev": "nodemon -w app.js -w nuxt.config.js app.js",
-    "build": "nuxt build",
-    "start": "cross-env NODE_ENV=production node app.js",
+    "dev": "backpack dev",
+    "build": "nuxt build && backpack build",
+    "start": "cross-env NODE_ENV=production node build/main.js",
     "precommit": "npm run lint",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
     "bulma": "^0.4.1",
-    "cross-env": "^3.1.4",
-    "koa": "^2.0.0",
+    "cross-env": "^4.0.0",
+    "express": "^4.14.0",
     "node-sass": "^4.5.2",
-    "nuxt": "latest",
+    "nuxt": "~0.10.6",
     "sass-loader": "^6.0.3",
-    "ws": "^2.3.1"
+    "source-map-support": "^0.4.14"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "backpack-core": "^0.3.0",
     "eslint": "^3.13.1",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-html": "^1.7.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-html": "^2.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "nodemon": "^1.11.0",
-    "scmp": "^2.0.0"
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
