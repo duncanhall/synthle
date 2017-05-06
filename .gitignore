@@ -1,7 +1,7 @@
 # dependencies
 node_modules
 
-# logs
+# log
 npm-debug.log
 
 # Nuxt build
@@ -10,6 +10,9 @@ npm-debug.log
 # Nuxt generate
 dist
 
-# Vim 
+# Backpack build
+build
+
+# Vim
 **/*.swp
 **/*.swo
