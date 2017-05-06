@@ -1,8 +1,8 @@
 <template>
   <div>
-    <loader v-if="detectingDevice" />
-    <join-dialog v-if="!detectingDevice && touchCapable" />
-    <room-info v-if="!detectingDevice && !touchCapable" />
+    <loader v-if="!deviceDetected" />
+    <join-dialog v-if="deviceDetected && touchCapable" />
+    <room-info v-if="deviceDetected && !touchCapable" />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 
   data () {
     return {
-      detectingDevice: true,
+      deviceDetected: false,
       touchCapable: false
     }
   },
@@ -30,7 +30,7 @@ export default {
       navigator.maxTouchPoints > 0 ||
       window.navigator.msMaxTouchPoints > 0;
 
-    this.detectingDevice = false;
+    this.deviceDetected = true;
   },
 
   components: {

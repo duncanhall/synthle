@@ -4,14 +4,32 @@
       <div class="container">
         <div class="square">
           <p class="control">
-            <input class="input" type="text" placeholder="Room ID">
+            <input v-model="roomID" class="input" type="text" placeholder="Room ID">
           </p>
-          <div class="button">Join</div>
+          <div v-on:click="joinRoom" class="button">Join</div>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script>
+import socketClient from '~assets/app/socketClient';
+
+export default {
+  data() {
+    return {
+      roomID: null
+    }
+  },
+
+  methods: {
+    joinRoom () {
+      socketClient.doThing(this.roomID)
+    }
+  }
+}
+</script>
 
 <style>
 .square {
