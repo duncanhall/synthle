@@ -1,11 +1,16 @@
 import Nuxt from 'nuxt'
 import express from 'express'
+import http from 'http'
+import WsServer from './WsServer';
 
 const app = express()
 const host = process.env.HOST || '0.0.0.0'
 const port = process.env.PORT || 2222
 
 app.set('port', port)
+
+const server = http.createServer(app)
+const wsServer = new WsServer(server);
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -24,6 +29,4 @@ if (config.dev) {
   })
 }
 
-// Listen the server
-app.listen(port, host)
-console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
+server.listen(port, host)

@@ -11,6 +11,6 @@ module.exports = {
   },
   css: [
     { src: 'bulma', lang:'sass' },
-    '~assets/main.css'
+    '~assets/styles/main.css'
   ]
 }

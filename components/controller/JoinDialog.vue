@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import socketClient from '~assets/app/socketClient';
-
 export default {
   data() {
     return {
@@ -25,7 +23,7 @@ export default {
 
   methods: {
     joinRoom () {
-      socketClient.doThing(this.roomID)
+      console.log('join room')
     }
   }
 }
