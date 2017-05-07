@@ -1,7 +1,13 @@
-const CREATE_ROOM = "1";
-const ROOM_CREATED = "2";
+const REGISTER_SYNTHLE = '0';
+const REGISTER_CONTROLLER = '1';
+const REGISTERED = '2'
+const CREATE_ROOM = '3';
+const ROOM_CREATED = '4';
 
 module.exports = {
+  REGISTER_SYNTHLE,
+  REGISTER_CONTROLLER,
+  REGISTERED,
   CREATE_ROOM,
   ROOM_CREATED
 }

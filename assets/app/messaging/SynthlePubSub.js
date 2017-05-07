@@ -1,5 +1,5 @@
 
-import SynthleEvent from '~assets/app/messaging/SynthleEvent';
+import SynthleEvent from './SynthleEvent';
 
 class SynthlePubSub {
   constructor() {
@@ -32,3 +32,4 @@ class SynthlePubSub {
 }
 
 export default SynthlePubSub
+

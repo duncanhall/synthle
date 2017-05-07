@@ -1,7 +1,7 @@
 <template>
   <section class="hero is-fullheight">
     <div class="hero-body">
-      <div class="container">
+      <div class="container room-info">
         <h1 class="title">
           {{ roomInfo }}
         </h1>
@@ -18,7 +18,7 @@
     mounted () {
       this.client = new SocketClient();
       this.client.subscribe(ROOM_CREATED, this.onRoomInfo);
-      this.getRoomInfo();
+      this.connect();
     },
 
     data() {
@@ -28,7 +28,7 @@
     },
 
     methods: {
-      async getRoomInfo() {
+      async connect() {
         await this.client.connect();
         this.client.send(CREATE_ROOM);
       },
@@ -39,3 +39,9 @@
     }
   }
 </script>
+
+<style>
+  .room-info {
+    text-align: center;
+  }
+</style>

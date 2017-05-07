@@ -1,6 +1,7 @@
 
 import SynthlePubSub from './messaging/SynthlePubSub'
 import SynthleEvent from './messaging/SynthleEvent';
+import { REGISTER_SYNTHLE, REGISTERED } from './messaging/SynthleEventType';
 
 class SocketClient extends SynthlePubSub {
   constructor() {
@@ -10,10 +11,20 @@ class SocketClient extends SynthlePubSub {
   connect() {
     return new Promise(resolve => {
       this.socket = new WebSocket('ws://192.168.0.14:2222');
-      this.socket.onmessage = this._publish.bind(this);
-      this.socket.onerror = this._onError.bind(this);
-      this.socket.onclose = this._onClose.bind(this);
-      this.socket.onopen = resolve;
+      this.socket.onopen = function() {
+        // Resolve the promise once connected and registered
+        this.socket.onmessage = function(message) {
+          const event = SynthleEvent.fromMessage(message);
+          if (event.type === REGISTERED) {
+            this.socket.onmessage = this._publish.bind(this);
+            this.socket.onerror = this._onError.bind(this);
+            this.socket.onclose = this._onClose.bind(this);
+            resolve();
+          }
+        }.bind(this);
+        
+        this.send(REGISTER_SYNTHLE);
+      }.bind(this);
     });
   }
 
@@ -31,5 +42,5 @@ class SocketClient extends SynthlePubSub {
   }
 }
 
-
 export default SocketClient
+
