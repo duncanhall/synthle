@@ -3,10 +3,15 @@
     <div class="hero-body">
       <div class="container">
         <div class="square">
-          <p class="control">
-            <input v-model="roomID" class="input" type="text" placeholder="Room ID">
+          <div class="field" >
+            <p class="control">
+              <input v-model="roomID" :disabled="isConnecting" class="input" type="text" placeholder="Room ID" />
+            </p>
+            <div v-on:click="joinRoom" v-bind:class="{ 'is-loading': isConnecting }" :disable="isConnecting" class="button">Join</div>
+          </div>
+          <p v-if="roomNotFound" class="has-text-centered">
+            Room not found
           </p>
-          <div v-on:click="joinRoom" class="button">Join</div>
         </div>
       </div>
     </div>
@@ -15,17 +20,21 @@
 
 <script>
   import SocketClient from '~assets/app/socketClient';
-  import { REGISTER_CONTROLLER, JOIN_ROOM } from '~assets/app/messaging/SynthleEventType';
+  import { REGISTER_CONTROLLER, JOIN_ROOM, ROOM_NOT_FOUND, CONTROLLER_JOINED } from '~assets/app/messaging/SynthleEventType';
 
   export default {
     mounted() {
       this.client = new SocketClient();
+      this.client.subscribe(ROOM_NOT_FOUND, this.onRoomNotFound);
+      this.client.subscribe(CONTROLLER_JOINED, this.onJoinRoom);
       this.connect();
     },
     
     data() {
       return {
-        roomID: null
+        roomID: null,
+        isConnecting: false,
+        roomNotFound: false
       }
     },
 
@@ -35,7 +44,19 @@
       },
       
       joinRoom () {
+        this.isConnecting = true;
+        this.roomNotFound = false;
         this.client.send(JOIN_ROOM, { id:this.roomID });
+      },
+
+      onJoinRoom() {
+        this.isConnecting = false;
+        this.$router.push('controller');
+      },
+
+      onRoomNotFound() {
+        this.isConnecting = false;
+        this.roomNotFound = true;
       }
     }
   }

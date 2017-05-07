@@ -1,10 +1,11 @@
-const REGISTER_SYNTHLE = '0';
-const REGISTER_CONTROLLER = '1';
-const REGISTERED = '2'
-const CREATE_ROOM = '3';
-const ROOM_CREATED = '4';
-const JOIN_ROOM = '5';
-const CONTROLLER_JOINED = '6';
+const REGISTER_SYNTHLE = 0;
+const REGISTER_CONTROLLER = 1;
+const REGISTERED = 2;
+const CREATE_ROOM = 3;
+const ROOM_CREATED = 4;
+const JOIN_ROOM = 5;
+const CONTROLLER_JOINED = 6;
+const ROOM_NOT_FOUND = 7;
 
 module.exports = {
   REGISTER_SYNTHLE,

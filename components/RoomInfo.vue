@@ -1,7 +1,7 @@
 <template>
   <section class="hero is-fullheight">
     <div class="hero-body">
-      <div class="container room-info">
+      <div class="container has-text-centered">
         <h1 class="title">
           {{ roomInfo }}
         </h1>
@@ -39,14 +39,9 @@
       },
 
       onControllerJoined (data) {
-        console.log('CONTROLLER JOINED ROOM!');
+        this.$router.push('synthle');
       }
     }
   }
 </script>
 
-<style>
-  .room-info {
-    text-align: center;
-  }
-</style>

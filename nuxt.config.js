@@ -12,5 +12,9 @@ module.exports = {
   css: [
     { src: 'bulma', lang:'sass' },
     '~assets/styles/main.css'
+  ],
+  loading: false,
+  plugins: [
+    { src: '~plugins/vue-touch', ssr: false }
   ]
 }

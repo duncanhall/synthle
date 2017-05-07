@@ -80,9 +80,14 @@ class ControllerConnection extends SynthlePubSub {
   }
 
   _joinRoom(data) {
-    console.log('JOIN ROOM: ' + data.id);
-    this.synthle = this.getSynthle(data.id);
-    this._sendToSynthle(EventType.CONTROLLER_JOINED);
+    const synthle = this.getSynthle(data.id);
+    if (synthle === undefined) {
+      this.send(EventType.ROOM_NOT_FOUND);
+    } else {
+      this.synthle = synthle;
+      this._sendToSynthle(EventType.CONTROLLER_JOINED);
+      this.send(EventType.CONTROLLER_JOINED);
+    }
   }
 
   _sendToSynthle(type, data) {
