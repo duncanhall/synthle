@@ -1,14 +1,14 @@
 
 import SynthlePubSub from './messaging/SynthlePubSub'
 import SynthleEvent from './messaging/SynthleEvent';
-import { REGISTER_SYNTHLE, REGISTERED } from './messaging/SynthleEventType';
+import { REGISTERED } from './messaging/SynthleEventType';
 
 class SocketClient extends SynthlePubSub {
   constructor() {
     super();
   }
 
-  connect() {
+  connect(registration) {
     return new Promise(resolve => {
       this.socket = new WebSocket('ws://192.168.0.14:2222');
       this.socket.onopen = function() {
@@ -23,7 +23,7 @@ class SocketClient extends SynthlePubSub {
           }
         }.bind(this);
         
-        this.send(REGISTER_SYNTHLE);
+        this.send(registration);
       }.bind(this);
     });
   }

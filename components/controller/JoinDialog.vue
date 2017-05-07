@@ -14,19 +14,31 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      roomID: null
-    }
-  },
+  import SocketClient from '~assets/app/socketClient';
+  import { REGISTER_CONTROLLER, JOIN_ROOM } from '~assets/app/messaging/SynthleEventType';
 
-  methods: {
-    joinRoom () {
-      console.log('join room')
+  export default {
+    mounted() {
+      this.client = new SocketClient();
+      this.connect();
+    },
+    
+    data() {
+      return {
+        roomID: null
+      }
+    },
+
+    methods: {
+      async connect() {
+        await this.client.connect(REGISTER_CONTROLLER);
+      },
+      
+      joinRoom () {
+        this.client.send(JOIN_ROOM, { id:this.roomID });
+      }
     }
   }
-}
 </script>
 
 <style>
