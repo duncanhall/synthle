@@ -31,13 +31,27 @@ class WsServer {
     }
   }
 
+  onCloseSynthle(id, event) {
+    console.log('SYNTHLE CLOSED: ' + id);
+    this.getSynthleConnection(id).destroy();
+    this.sessions.delete(id);
+  }
+
+  onCloseController(controller, event) {
+    console.log('CONTROLLER CLOSED');
+    controller.destroy();
+  }
+  
   registerSynthle(socket) {
     const id = uuidV4().substr(0, 7);
+    socket.onclose = event => this.onCloseSynthle(id, event);
     this.sessions.set(id, new SynthleConnection(socket, id));
+    console.log('TOTAL ROOMS:' + this.sessions.size);
   }
   
   registerController(socket) {
-    new ControllerConnection(socket, id => this.getSynthleConnection(id));
+    const controller = new ControllerConnection(socket, id => this.getSynthleConnection(id));
+    socket.onclose = event => this.onCloseController(controller, event);
   }
 
   getSynthleConnection(id) {
@@ -62,6 +76,13 @@ class SynthleConnection extends SynthlePubSub {
 
   _createNewRoom() {
     this.send(EventType.ROOM_CREATED, { id:this.id });
+  }
+
+  destroy() {
+    this.unsubscribeAll();
+    this.socket.onmessage = null;
+    this.socket.onclose = null;
+    this.socket = null;
   }
 }
 
@@ -94,6 +115,15 @@ class ControllerConnection extends SynthlePubSub {
 
   _sendToSynthle(type, data) {
     this.synthle.send(type, data);
+  }
+
+  destroy() {
+    this.unsubscribeAll();
+    this.synthle = null;
+    this.getSynthle = null;
+    this.socket.onmessage = null;
+    this.socket.onclose = null;
+    this.socket = null;
   }
 }
 

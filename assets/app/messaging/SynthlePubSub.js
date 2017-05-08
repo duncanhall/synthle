@@ -26,6 +26,12 @@ class SynthlePubSub {
     this.subscribers.set(eventType, subs);
   }
 
+  unsubscribeAll() {
+    this.subscribers.forEach(sub => sub.clear());
+    this.subscribers.clear();
+    this.subscribers = null;
+  }
+
   _publish(message) {
     const event = SynthleEvent.fromMessage(message);
     const type = event.type;
