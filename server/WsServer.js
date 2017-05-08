@@ -1,5 +1,5 @@
 
-import WebSocket from 'ws';
+import WebSocket from 'uws';
 import uuidV4 from 'uuid/v4';
 import SynthleEvent from '../assets/app/messaging/SynthleEvent';
 import SynthlePubSub from '../assets/app/messaging/SynthlePubSub';
@@ -90,10 +90,6 @@ class ControllerConnection extends SynthlePubSub {
       this._sendToSynthle(EventType.CONTROLLER_JOINED);
       this.send(EventType.CONTROLLER_JOINED);
     }
-  }
-
-  _relay(data) {
-    this._sendToSynthle(EventType.RELAY, data);
   }
 
   _sendToSynthle(type, data) {
