@@ -8,26 +8,27 @@ import * as EventType from '../assets/app/messaging/SynthleEventType';
 class WsServer {
   constructor(server) {
     this.wss = new WebSocket.Server({ server, perMessageDeflate:false });
-    this.wss.on('connection', this.onNewConnection.bind(this));
+    this.wss.on('connection', ws => this.onNewConnection(ws));
     this.sessions = new Map();
   }
 
   onNewConnection(ws) {
-    ws.onmessage = function(msg) {
-      const event = SynthleEvent.fromMessage(msg);
-      switch(event.type) {
+    ws.onmessage = msg => this.onMessage(ws, msg);
+  }
 
-        case EventType.REGISTER_SYNTHLE:
-          ws.onmessage = null;
-          this.registerSynthle(ws);
-          break;
-        
-        case EventType.REGISTER_CONTROLLER:
-          ws.onmessage = null;
-          this.registerController(ws);
-          break;
-      }
-    }.bind(this);
+  onMessage(ws, msg) {
+    const event = SynthleEvent.fromMessage(msg);
+    switch(event.type) {
+      case EventType.REGISTER_SYNTHLE:
+        ws.onmessage = null;
+        this.registerSynthle(ws);
+        break;
+      
+      case EventType.REGISTER_CONTROLLER:
+        ws.onmessage = null;
+        this.registerController(ws);
+        break;
+    }
   }
 
   registerSynthle(socket) {
@@ -36,7 +37,7 @@ class WsServer {
   }
   
   registerController(socket) {
-    new ControllerConnection(socket, this.getSynthleConnection.bind(this));
+    new ControllerConnection(socket, id => this.getSynthleConnection(id));
   }
 
   getSynthleConnection(id) {
@@ -71,6 +72,7 @@ class ControllerConnection extends SynthlePubSub {
     this.getSynthle = getSynthle;
     this.socket.onmessage = this._publish.bind(this);
     this.subscribe(EventType.JOIN_ROOM, this._joinRoom.bind(this));
+    this.subscribe(EventType.RELAY, this._sendToSynthle.bind(this, EventType.RELAY));
     this.send(EventType.REGISTERED);
   }
 
@@ -88,6 +90,10 @@ class ControllerConnection extends SynthlePubSub {
       this._sendToSynthle(EventType.CONTROLLER_JOINED);
       this.send(EventType.CONTROLLER_JOINED);
     }
+  }
+
+  _relay(data) {
+    this._sendToSynthle(EventType.RELAY, data);
   }
 
   _sendToSynthle(type, data) {

@@ -1,11 +1,15 @@
-const REGISTER_SYNTHLE = 0;
-const REGISTER_CONTROLLER = 1;
-const REGISTERED = 2;
-const CREATE_ROOM = 3;
-const ROOM_CREATED = 4;
-const JOIN_ROOM = 5;
-const CONTROLLER_JOINED = 6;
-const ROOM_NOT_FOUND = 7;
+
+const COMPRESS = process.env.NODE_ENV === 'production';
+const setValue = (c, u) => COMPRESS ? c : u;
+const REGISTER_SYNTHLE = setValue(0, 'RegisterSynthle');
+const REGISTER_CONTROLLER = setValue(1, 'RegisterController');
+const REGISTERED = setValue(2, 'Registered');
+const CREATE_ROOM = setValue(3, 'CreateRoom');
+const ROOM_CREATED = setValue(4, 'RoomCreated');
+const JOIN_ROOM = setValue(5, 'JoinRoom');
+const CONTROLLER_JOINED = setValue(6, 'ControllerJoined');
+const ROOM_NOT_FOUND = setValue(7, 'RoomNotFound');
+const RELAY = setValue(22, 'Relay');
 
 module.exports = {
   REGISTER_SYNTHLE,
@@ -14,5 +18,7 @@ module.exports = {
   CREATE_ROOM,
   ROOM_CREATED,
   JOIN_ROOM,
-  CONTROLLER_JOINED
+  CONTROLLER_JOINED,
+  ROOM_NOT_FOUND,
+  RELAY
 }

@@ -7,6 +7,9 @@ class SynthlePubSub {
   }
 
   subscribe(eventType, handler) {
+    if (eventType === undefined) {
+      console.warn(`Adding undefined event handler for ${handler.name}`);
+    }
     let subs = this.subscribers.get(eventType) || new Set();
     if (!this.subscribers.has(eventType)) {
       this.subscribers.set(eventType, subs);
@@ -15,6 +18,9 @@ class SynthlePubSub {
   }
 
   unsubscribe(eventType, handler) {
+    if (eventType === undefined) {
+      console.warn(`Adding undefined event handler for ${handler.name}`);
+    }
     let subs = this.subscribers.get(eventType);
     subs.delete(handler);
     this.subscribers.set(eventType, subs);

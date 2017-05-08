@@ -1,33 +1,25 @@
 <template>
-  <section class="hero is-fullheight">
-    <div class="hero-body">
-      <div class="container">
-        <div class="square">
-          <div class="field" >
-            <p class="control">
-              <input v-model="roomID" :disabled="isConnecting" class="input" type="text" placeholder="Room ID" />
-            </p>
-            <div v-on:click="joinRoom" v-bind:class="{ 'is-loading': isConnecting }" :disable="isConnecting" class="button">Join</div>
-          </div>
-          <p v-if="roomNotFound" class="has-text-centered">
-            Room not found
-          </p>
-        </div>
-      </div>
+  <div class="join-dialog">
+    <div class="field">
+      <p class="control">
+        <input v-model="roomID" :disabled="isConnecting" class="input" type="text" placeholder="Room ID" />
+      </p>
+      <div v-on:click="joinRoom" v-bind:class="{ 'is-loading': isConnecting }" :disable="isConnecting" class="button">Join</div>
     </div>
-  </section>
+    <p v-if="roomNotFound" class="has-text-centered">
+      Room not found
+    </p>
+  </div>
 </template>
 
 <script>
-  import SocketClient from '~assets/app/socketClient';
-  import { REGISTER_CONTROLLER, JOIN_ROOM, ROOM_NOT_FOUND, CONTROLLER_JOINED } from '~assets/app/messaging/SynthleEventType';
+  import { JOIN_ROOM, ROOM_NOT_FOUND, CONTROLLER_JOINED } from '~assets/app/messaging/SynthleEventType';
 
   export default {
     mounted() {
-      this.client = new SocketClient();
+      this.client = this.getSynthleConnection();
       this.client.subscribe(ROOM_NOT_FOUND, this.onRoomNotFound);
       this.client.subscribe(CONTROLLER_JOINED, this.onJoinRoom);
-      this.connect();
     },
     
     data() {
@@ -39,10 +31,6 @@
     },
 
     methods: {
-      async connect() {
-        await this.client.connect(REGISTER_CONTROLLER);
-      },
-      
       joinRoom () {
         this.isConnecting = true;
         this.roomNotFound = false;
@@ -51,28 +39,35 @@
 
       onJoinRoom() {
         this.isConnecting = false;
-        this.$router.push('controller');
       },
 
       onRoomNotFound() {
         this.isConnecting = false;
         this.roomNotFound = true;
       }
-    }
+    },
+
+    beforeDestroy() {
+      this.client.unsubscribe(ROOM_NOT_FOUND, this.onRoomNotFound);
+      this.client.unsubscribe(CONTROLLER_JOINED, this.onJoinRoom);
+    },
   }
 </script>
 
-<style>
-.square {
-  background: #ACACAC;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  border: 1px solid #999999;
-  border-radius: 4px;
-}
+<style scoped>
+  .join-dialog {
+    background: #ACACAC;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border: 1px solid #999999;
+    border-radius: 4px;
+  }
 
-.button, .input {
-  width: 90%;
-  margin-left: 5%;
-}
+  .button, .input {
+    width: 90%;
+  }
+
+  .input {
+    margin-left: 5%;
+  }
 </style>

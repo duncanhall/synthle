@@ -15,6 +15,7 @@ module.exports = {
   ],
   loading: false,
   plugins: [
-    { src: '~plugins/vue-touch', ssr: false }
+    { src: '~plugins/vue-touch', ssr: false },
+    { src: '~plugins/synthle-socket', ssr: false }
   ]
 }
