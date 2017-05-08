@@ -32,13 +32,11 @@ class WsServer {
   }
 
   onCloseSynthle(id, event) {
-    console.log('SYNTHLE CLOSED: ' + id);
     this.getSynthleConnection(id).destroy();
     this.sessions.delete(id);
   }
 
   onCloseController(controller, event) {
-    console.log('CONTROLLER CLOSED');
     controller.destroy();
   }
   
@@ -46,7 +44,6 @@ class WsServer {
     const id = uuidV4().substr(0, 7);
     socket.onclose = event => this.onCloseSynthle(id, event);
     this.sessions.set(id, new SynthleConnection(socket, id));
-    console.log('TOTAL ROOMS:' + this.sessions.size);
   }
   
   registerController(socket) {

@@ -8,23 +8,30 @@ class SocketClient extends SynthlePubSub {
     super();
   }
 
+  get isConnected() {
+    if (this.socket === undefined) {
+      return false;
+    }
+    const readyState = this.socket.readyState;
+    return readyState === WebSocket.OPEN || readyState === WebSocket.CONNECTING;
+  }
+
   connect(registration) {
     return new Promise(resolve => {
       this.socket = new WebSocket('ws://192.168.0.14:2222');
-      this.socket.onopen = function() {
+      this.socket.onopen = () => {
         // Resolve the promise once connected and registered
-        this.socket.onmessage = function(message) {
+        this.socket.onmessage = message => {
           const event = SynthleEvent.fromMessage(message);
           if (event.type === REGISTERED) {
-            this.socket.onmessage = this._publish.bind(this);
-            this.socket.onerror = this._onError.bind(this);
-            this.socket.onclose = this._onClose.bind(this);
+            this.socket.onmessage = msg => this._publish(msg);
+            this.socket.onerror = error => this._onError(error);
+            this.socket.onclose = event => this._onClose(event);
             resolve();
           }
-        }.bind(this);
-        
+        };
         this.send(registration);
-      }.bind(this);
+      };
     });
   }
 
@@ -39,6 +46,7 @@ class SocketClient extends SynthlePubSub {
 
   _onClose(event) {
     console.log(`CLOSE: ${event.data}`);
+    this.unsubscribeAll();
   }
 }
 
