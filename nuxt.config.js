@@ -7,6 +7,9 @@ module.exports = {
     ],
     link: [
       { rel:'stylesheet', href:'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' }
+    ],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/85/three.min.js' }
     ]
   },
   css: [
