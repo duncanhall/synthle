@@ -19,6 +19,7 @@
     "nuxt": "~0.10.6",
     "sass-loader": "^6.0.3",
     "source-map-support": "^0.4.14",
+    "tween.js": "^16.6.0",
     "uuid": "^3.0.1",
     "uws": "^0.14.5",
     "vue-touch": "^2.0.0-beta.4"

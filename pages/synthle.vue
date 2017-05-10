@@ -16,15 +16,18 @@
   export default {
     mounted() {
       this.client = this.getSynthleConnection();
-      this.client.subscribe(RELAY, this.onControllerEvent);
+      this.client.subscribe(RELAY, this.onControllerEvent.bind(this));
       this.circle = new CircleThing();
       this.circle.start(this.$refs.placeholder);
     },
 
     methods: {
       onControllerEvent(event) {
-        const r = event.isPressed ? 4 : 2;
-        this.circle.radius = r;
+        if (event.isPressed) {
+          this.circle.grow();
+        } else {
+          this.circle.shrink();
+        } 
       }
     }
   }

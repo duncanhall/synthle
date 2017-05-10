@@ -1,4 +1,6 @@
 
+import TWEEN from 'tween.js';
+
 class CircleThing {
 
   constructor() {
@@ -7,6 +9,18 @@ class CircleThing {
 
   set radius(value) {
     this._radius = value;
+  }
+
+  get radius() {
+    return this._radius;
+  }
+  
+  grow() {
+    new TWEEN.Tween(this).to({ radius:4 }, 100).start();
+  }
+
+  shrink() {
+    new TWEEN.Tween(this).to({ radius:2 }, 100).start();
   }
 
   start(element) {
@@ -74,6 +88,7 @@ class CircleThing {
         wave.geometry.verticesNeedUpdate = true;
       });
       requestAnimationFrame(update.bind(this));
+      TWEEN.update();
       renderer.render(scene, camera);
     }
 
