@@ -5,6 +5,9 @@ class CircleThing {
 
   constructor() {
     this._radius = 2;
+    this._peaks = 4;
+    this.group = new THREE.Object3D();
+    this.rotationSpeed = 0.006;
   }
 
   set radius(value) {
@@ -16,18 +19,17 @@ class CircleThing {
   }
   
   grow() {
-    new TWEEN.Tween(this).to({ radius:4 }, 100).start();
+    new TWEEN.Tween(this).to({ radius:4, _peaks:6, rotationSpeed:0.01 }, 120).easing(TWEEN.Easing.Quadratic.In).start();
   }
 
   shrink() {
-    new TWEEN.Tween(this).to({ radius:2 }, 100).start();
+    new TWEEN.Tween(this).to({ radius:2, _peaks:4, rotationSpeed:0.006 }, 100).start();
   }
 
   start(element) {
     const SCENE_W = 500;
     const SCENE_H = 500;
     const DEGREES = 720;
-    const PEAKS = 8;
     const PEAK_HEIGHT = 0.2;
     const RANGE = 1;
     const SMOOTH = 0.16;
@@ -39,13 +41,13 @@ class CircleThing {
     let renderer = new THREE.WebGLRenderer({ antialias: true } ); 
     let counter = 0;
     let colors = [0xFFFFFF, "rgb(222, 77, 77)", "rgb(120, 255, 255)"];
-    let group = new THREE.Object3D();
+
     let waves = colors.map((color, i) => {
       let obj = new THREE.Line( new THREE.Geometry(), new THREE.LineBasicMaterial({ color }));
       obj.geometry.dynamic = true;
       obj.geometry.vertices = generate_points(i);
       obj.geometry.verticesNeedUpdate = true;
-      group.add(obj);
+      this.group.add(obj);
       return obj;
     });
 
@@ -54,9 +56,9 @@ class CircleThing {
     camera.position.z = 10; 
     renderer.setClearColor(new THREE.Color("rgb(22,22,22)"));
     renderer.setSize(SCENE_W, SCENE_H); 
-    scene.add(group);
+    scene.add(this.group);
 
-    function generate_points(modifier, radius){
+    function generate_points(modifier, radius, peaks){
       let points = [];
       if (counter === DEGREES) {
         counter = 0;
@@ -71,7 +73,7 @@ class CircleThing {
         const angle = (Math.PI / 180 * i) + (modifier * 120);
         const speed = counter / 9
         const dv = angle + speed;
-        const rad = dv * PEAKS;
+        const rad = dv * peaks;
         const dw = PEAK_HEIGHT * smoothing;
         const waveFunc = modifier === 2 ? Math.sin : Math.cos;
         const dr = (dw * waveFunc(rad)) * (modifier === 2 ? -1 : 1);
@@ -84,9 +86,10 @@ class CircleThing {
     function update() {
       counter++;
       waves.forEach((wave, i) => {
-        wave.geometry.vertices = generate_points(i, this._radius);
+        wave.geometry.vertices = generate_points(i, this._radius, this._peaks);
         wave.geometry.verticesNeedUpdate = true;
       });
+      this.group.rotation.z -= this.rotationSpeed;
       requestAnimationFrame(update.bind(this));
       TWEEN.update();
       renderer.render(scene, camera);
