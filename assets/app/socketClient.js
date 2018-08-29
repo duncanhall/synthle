@@ -18,7 +18,7 @@ class SocketClient extends SynthlePubSub {
 
   connect(registration) {
     return new Promise(resolve => {
-      this.socket = new WebSocket('ws://192.168.0.14:2222');
+      this.socket = new WebSocket('ws://10.0.1.25:2222');
       this.socket.onopen = () => {
         // Resolve the promise once connected and registered
         this.socket.onmessage = message => {
