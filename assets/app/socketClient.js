@@ -18,7 +18,12 @@ class SocketClient extends SynthlePubSub {
 
   connect(registration) {
     return new Promise(resolve => {
-      this.socket = new WebSocket('ws://10.0.1.25:2222');
+      // Nuxt config makes env available on both client and server
+      const connection = `ws://${process.env.SYNTHLE_HOST}:${process.env.SYNTHLE_PORT}`
+
+      // We use the same connection string for all connections
+      // to ensure we're connecting to the same server
+      this.socket = new WebSocket(connection);
       this.socket.onopen = () => {
         // Resolve the promise once connected and registered
         this.socket.onmessage = message => {

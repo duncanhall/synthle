@@ -17,6 +17,10 @@ module.exports = {
     '~assets/styles/main.css'
   ],
   loading: false,
+  env: {
+    SYNTHLE_HOST: process.env.HOST || '0.0.0.0',
+    SYNTHLE_PORT: process.env.PORT || 2222,
+  },
   plugins: [
     { src: '~plugins/vue-touch', ssr: false },
     { src: '~plugins/synthle-socket', ssr: false }
